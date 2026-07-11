@@ -1,27 +1,26 @@
-<!-- PEMANGGILAN SCRIPT UTAMA -->
+<!-- PEMANGGILAN SCRIPT UTAMA (PASTIKAN POSISINYA DI PALING BAWAH SEBELUM TAG </body>) -->
 <script src="pengaturan.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-// 1. Inisialisasi Supabase menggunakan file pengaturan.js
+// 1. Inisialisasi Supabase menggunakan konfigurasi dari pengaturan.js
 const supabaseClient = supabase.createClient(CONFIG_APP.supabaseUrl, CONFIG_APP.supabaseKey);
 
-// Jalankan fungsi otomatis saat halaman admin selesai dimuat
+// Jalankan fungsi otomatis saat halaman admin selesai dimuat oleh browser
 document.addEventListener('DOMContentLoaded', () => {
-    // Cek status login (jika kamu pakai sistem session/password)
     loadBookingData();
     
-    // Pasang event listener ke form input manual
+    // Pasang event listener ke form input manual admin
     const adminForm = document.getElementById('adminBookingForm');
     if (adminForm) {
         adminForm.addEventListener('submit', saveManualBooking);
     }
 });
 
-// 2. Fungsi Mengambil Data Klien dari Database (Menampilkan ke Tabel Dashboard)
+// 2. Fungsi Mengambil Data dari Database (Menampilkan ke Tabel Dasbor)
 async function loadBookingData() {
     try {
-        // PERBAIKAN: Mengubah tabel dari 'clients' menjadi 'bookings'
+        // SUDAH DIPERBAIKI: Mengubah tabel dari 'clients' menjadi 'bookings'
         const { data, error } = await supabaseClient
             .from('bookings')
             .select('*')
@@ -63,16 +62,15 @@ async function loadBookingData() {
 
     } catch (err) {
         console.error("Gagal memuat data:", err);
-        // Menampilkan pesan error spesifik agar gampang di-troubleshoot jika domain bermasalah
         alert("Gagal memuat data dari database.\nAlasan: " + (err.message || "Masalah jaringan/DNS Supabase"));
     }
 }
 
-// 3. Fungsi Menyimpan Data Klien Baru via Form Admin
+// 3. Fungsi Menyimpan Data Klien Baru via Form Admin Manual
 async function saveManualBooking(event) {
     event.preventDefault();
 
-    // Ambil data dari form input admin
+    // Ambil data dari elemen input form admin kamu
     const nama = document.getElementById('clientName').value;
     const whatsapp = document.getElementById('clientWhatsapp').value;
     const tanggal = document.getElementById('clientDate').value;
@@ -85,7 +83,7 @@ async function saveManualBooking(event) {
     const dress = document.getElementById('clientDress').value;
 
     try {
-        // PERBAIKAN: Mengubah tabel dari 'clients' menjadi 'bookings'
+        // SUDAH DIPERBAIKI: Mengubah tabel dari 'clients' menjadi 'bookings'
         const { error } = await supabaseClient
             .from('bookings')
             .insert([{
@@ -107,7 +105,7 @@ async function saveManualBooking(event) {
         alert('Data Klien Berhasil Disimpan ke Database!');
         document.getElementById('adminBookingForm').reset();
         
-        // Muat ulang isi tabel agar data baru langsung muncul
+        // Muat ulang isi tabel agar data yang baru saja disimpan langsung muncul
         loadBookingData();
 
     } catch (err) {
@@ -119,6 +117,7 @@ async function saveManualBooking(event) {
 // 4. Fungsi Mengubah Status Pembayaran Menjadi Lunas
 async function updateStatusLunas(id) {
     try {
+        // SUDAH DIPERBAIKI: Mengubah tabel dari 'clients' menjadi 'bookings'
         const { error } = await supabaseClient
             .from('bookings')
             .update({ status: 'Lunas' })
@@ -137,12 +136,10 @@ async function updateStatusLunas(id) {
 
 // 5. Fungsi Generate Link Galeri Unik Klien
 function generateGalleryLink(nama, whatsapp) {
-    // Ubah nama menjadi huruf kecil dan hilangkan spasi untuk URL slug
     const slug = nama.toLowerCase().replace(/[^a-z0-9]/g, '-');
     const baseUrl = window.location.origin;
     const linkGaleri = `${baseUrl}/gallery?client=${slug}&phone=${whatsapp}`;
     
-    // Tampilkan link dan salin otomatis ke clipboard
     navigator.clipboard.writeText(linkGaleri).then(() => {
         alert(`Link galeri untuk ${nama} berhasil dibuat & disalin:\n${linkGaleri}`);
     }).catch(() => {
