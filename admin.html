@@ -24,7 +24,19 @@
                         <div class="col-md-4"><input type="time" id="clientTime" class="form-control" required></div>
                         <div class="col-md-4"><input type="text" id="clientLocation" class="form-control" placeholder="Lokasi Foto" required></div>
                         <div class="col-md-4"><input type="text" id="clientCampus" class="form-control" placeholder="Asal Kampus" required></div>
-                        <div class="col-md-4"><input type="text" id="clientPackage" class="form-control" placeholder="Paket Foto" required></div>
+                        
+                        <!-- Dropdown Pilihan Paket Sesuai Pricelist VIVIDLENS -->
+                        <div class="col-md-4">
+                            <select id="clientPackage" class="form-select" required>
+                                <option value="" disabled selected>Pilih Paket Foto...</option>
+                                <option value="Bronze 30 Menit (285k)">Bronze 30 Menit - Rp285.000</option>
+                                <option value="Bronze (325k)">Bronze - Rp325.000</option>
+                                <option value="Silver (350k)">Silver - Rp350.000</option>
+                                <option value="Gold (450k)">Gold - Rp450.000</option>
+                                <option value="Premium (1.000k)">Premium - Rp1.000.000</option>
+                            </select>
+                        </div>
+
                         <div class="col-md-4"><input type="text" id="clientSosmed" class="form-control" placeholder="Sosmed Klien"></div>
                         <div class="col-md-4"><input type="text" id="clientMua" class="form-control" placeholder="Info MUA"></div>
                         <div class="col-md-4"><input type="text" id="clientDress" class="form-control" placeholder="Info Dress"></div>
