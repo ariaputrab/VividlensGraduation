@@ -1,13 +1,12 @@
 const CONFIG_APP = {
-    // 1. URL Supabase Anda (Bisa dilihat di Project Settings -> API)
-    supabaseUrl: "https://xyz-id-database-kamu.supabase.co",
+    // URL ini otomatis didapatkan dari kode token kamu di atas
+    supabaseUrl: "https://aizhweokpxfrczqsuikr.supabase.co",
     
-    // 2. Anon Key Supabase Anda (Bisa dilihat di Project Settings -> API)
-    supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNreXBlY...",
+    // Tempelkan token panjang milikmu tadi di sini
+    supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFpemh3ZW9reHB4ZnJjenFzdWlrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3NTYwNTAsImV4cCI6MjA5OTMzMjA1MH0.ceD7xZpYpB1VIGXliS8r6huCZ7RNrIPh6vxN2LtulB8",
     
-    // 3. API Key Google Cloud Console Anda (Untuk membaca folder Google Drive)
-    googleApiKey: "AIzaSyA123-Kunci-Google-Drive-Kamu-Yang-Aktif",
+    // Isi dengan Google API Key kamu untuk Drive
+    googleApiKey: "AIzaSyA123-Kunci-Google-Drive-Kamu",
     
-    // 4. Nama Vendor Studio Foto Anda
     namaVendor: "VIVIDLENS"
 };
