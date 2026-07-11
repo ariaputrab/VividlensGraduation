@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIVIDLENS Graduation Booking</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="pengaturan.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 p-4 md:p-8">
+
+    <div class="max-w-2xl mx-auto bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-100">
+        <h2 class="text-2xl font-bold mb-6 text-center">Form Booking VIVIDLENS</h2>
+        
+        <form id="formBooking" onsubmit="submitBooking(event)" class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+                <div><label class="block text-xs font-bold uppercase text-slate-500 mb-1">Nama Client</label><input type="text" id="bookNama" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none"></div>
+                <div><label class="block text-xs font-bold uppercase text-slate-500 mb-1">No. WhatsApp</label><input type="tel" id="bookWA" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none"></div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div><label class="block text-xs font-bold uppercase text-slate-500 mb-1">Tanggal Foto</label><input type="date" id="bookTanggal" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none"></div>
+                <div><label class="block text-xs font-bold uppercase text-slate-500 mb-1">Jam Foto</label><input type="time" id="bookJam" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none"></div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div><label class="block text-xs font-bold uppercase text-slate-500 mb-1">Lokasi Foto</label><input type="text" id="bookLokasi" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none"></div>
+                <div><label class="block text-xs font-bold uppercase text-slate-500 mb-1">Kampus / Universitas</label><input type="text" id="bookKampus" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none"></div>
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Pilihan Paket Wisuda</label>
+                <select id="bookPaket" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none">
+                    <option value="Bronze 30 Menit (Rp285.000)">Bronze 30 Menit - Rp285.000</option>
+                    <option value="Bronze 60 Menit (Rp325.000)">Bronze 60 Menit - Rp325.000</option>
+                    <option value="Silver 60 Menit (Rp350.000)">Silver 60 Menit - Rp350.000</option>
+                    <option value="Gold 90 Menit (Rp450.000)">Gold 90 Menit - Rp450.000</option>
+                    <option value="Premium 90 Menit (Rp1.000.000)">Premium 90 Menit - Rp1.000.000</option>
+                </select>
+            </div>
+            <div class="grid grid-cols-3 gap-4">
+                <div><label class="block text-xs font-bold uppercase text-slate-500 mb-1">Instagram/TikTok</label><input type="text" id="bookSosmed" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none"></div>
+                <div><label class="block text-xs font-bold uppercase text-slate-500 mb-1">MUA</label><input type="text" id="bookMua" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none"></div>
+                <div><label class="block text-xs font-bold uppercase text-slate-500 mb-1">Dress</label><input type="text" id="bookDress" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none"></div>
+            </div>
+            <button type="submit" class="w-full py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-black transition">Ajukan Booking via WhatsApp</button>
+        </form>
+    </div>
+
+    <script>
+        let supabaseClient;
+        document.addEventListener("DOMContentLoaded", () => {
+            if (typeof CONFIG_APP !== 'undefined') {
+                supabaseClient = supabase.createClient(CONFIG_APP.supabaseUrl, CONFIG_APP.supabaseKey);
+            }
+        });
+
+        async function submitBooking(event) {
+            event.preventDefault();
+            const nama = document.getElementById('bookNama').value.trim();
+            const whatsapp = document.getElementById('bookWA').value.trim();
+            const tanggal = document.getElementById('bookTanggal').value;
+            const jam = document.getElementById('bookJam').value;
+            const lokasi = document.getElementById('bookLokasi').value.trim();
+            const kampus = document.getElementById('bookKampus').value.trim();
+            const paket = document.getElementById('bookPaket').value;
+            const sosmed = document.getElementById('bookSosmed').value.trim();
+            const mua = document.getElementById('bookMua').value.trim() || '-';
+            const dress = document.getElementById('bookDress').value.trim() || '-';
+
+            try {
+                const { error } = await supabaseClient.from('bookings').insert([{
+                    nama, whatsapp, tanggal, jam, lokasi, kampus, paket, sosmed, mua, dress, status: 'Pending'
+                }]);
+
+                if (error) throw error;
+                alert('Booking berhasil diajukan! Mengarahkan ke WhatsApp Admin...');
+                
+                setTimeout(() => {
+                    const waMessage = encodeURIComponent(`*FORM BOOKING VIVIDLENS GRADUATION 🎓📸*\n\nMohon lengkapi data berikut:\nNama : ${nama}\nTanggal Foto : ${tanggal}\nJam Foto : ${jam}\nLokasi Foto : ${lokasi}\nKampus : ${kampus}\nPaket : ${paket}\nInstagram / TikTok : ${sosmed}\nMUA : ${mua}\nDress : ${dress}\n\n💳 *DP Rp100.000 Sudah Di-transfer*\n_(Mohon lampirkan screenshoot bukti transfer setelah pesan ini terkirim)_`);
+                    window.open(`https://wa.me/6285155129954?text=${waMessage}`, '_blank'); 
+                    document.getElementById('formBooking').reset();
+                }, 2000);
+
+            } catch (err) {
+                alert('Gagal mengirim form booking.');
+            }
+        }
+    </script>
+</body>
+</html>
